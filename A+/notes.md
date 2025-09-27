@@ -139,3 +139,146 @@ They can also act as Caching devices in order to respond to requests without hav
 It can use QoS aswell as content switching capabilities for sending certain traffic to specific servers to maximize performance.
 
 Proxy servers sit in the middle of a conversation. Users make a request to a proxy server and then the proxy will communicate with a 3rd party service and get the required information. It will then scan the information and if its OK'd it will then send that information to the User. In so doing proxies can have many great security features like, Access Control, caching, URL filtering, content scanning, and many other security features.
+
+[[SCADA]] / [[ICS]] are used to manage and control industrial machines. SCADA allows you to see real time information of these devices and control them across the network. They are very secure and typically are segmented off to prevent outside tampering/outages.
+
+Legacy systems are often very hard to remove. They are typically really old but run extremely critical services.
+Embedded systems are purpose built devices that do not have a direct access to the operating system like, an Alarm system, door security, or a time card system. You rely on the manufacturers to provide support/maintenance.
+
+IoT devices are becoming more and more popular. Appliances, smart devices, air control, smart doorbells, thermostats, speakers, are all connecting to a network and due to the security risk that these devices bring you'll typically want to segment the network to limit any possible security issues these devices may bring.
+
+[[IPv4]] is the main protocol for everything we do, there is also IPv6.
+
+[[IPv4]] it consists of 4 sets of 1 byte numbers or octets (8 bits).
+
+[[IPv6]] is larger and should last forever as it is a 128-bit address. This means that it consists of 8 sections 2 octets or 16 bits long each. 
+You'll typically see your [[IPv6]] address displayed with the first 64 bits as the subnet (network address) and the last 64 bits as the host address. there are 340 undecillion possible ipv6 addresses.
+
+An IP Subnet is the combination of an IP address and a Subnet mask.
+In order for a device to communicate OUTSIDE of its local subnet it will need to know the default gateways IP address.
+
+Subnet masks are used by the **local device** to determine what subnet it's on.
+SUBNET MASKS ARE REQUIRED FOR IP ASSIGNMENT!
+The default gateway is used to communicate outside of the local network.
+These 3 things are the bare minimum configs for a local device.
+IP address, Subnet mask, and default gateway.
+
+DNS servers are required for name to IP translations (google.com to 142.251.211.238) these are critical so you'll typically have two different DNS servers or more incase of one being unresponsive
+
+The original/predecessor [[DHCP]] (automatic IP address assignment daemon/protocol) was called BOOTP or the bootstrap protocol. It had some shortcomings though, it couldn't know if a device left the network and there were still some manual configs you had to do.
+
+Thats when we invented [[DHCP]] in 1997. There are 4 steps that DHCP goes through to get you connected to the network, they are named D-O-R-A or Dora. 
+D - Discover, where devices try and find a DHCP Server on the network.
+O - Offer, where the DHCP server offers an IP address to the device.
+R - Request, where the device chooses one of the options given and requests the IP address.
+A - Acknowledge, where the DHCP server acknowledges the request and provides the device with all the IP config settings required.
+
+DHCP IP Reservation is handled by the DHCP Server as opposed to manually setting an IP address which is done via individual devices.
+
+[[APIPA]] is used by a device connected to a network which is having trouble communicating or receiving an IP from a DHCP server on a LAN. This Automatic Private IP Addressing or IPv4 link-local address will be able to communicate with devices on the local subnet to allow you to troubleshoot why you cant communicate with the DHCP server.
+
+The APIPA standard uses reserved IP Addresses from 169.254.1.0 - 169.254.254.254.255. When a devices attempts to assign itself one of these IP addresses it sends an ARP broadcast over the network
+
+Syslog protocol is a standard for consolidating system logs to a single place/location.
+Usually used to put logs on the central server [[SIEM]] 
+
+[[AAA]] is a centralized server to add security to a network. It is used to Authenticate users using login and passwords think of it as a login server.
+
+Database servers use Data table storage. Much like a large spreadsheet it saves information in columns and rows which allows for relational database structures by linking tables together these tables are flexible and fast. This data is accessed by [[SQL]].
+
+Mail Services typically have a  Spam Mail Server that is given spam emails based on rules from the firewall these are called "Spam Gateways."
+
+Next-generation firewall, [[UTM]] device, or Web security gateway are all names for the same thing, an All-in-one security appliance.
+This UTM can have URL filtering capabilities, Content inspection, Malware inspection, Spam filter, [[CSU.DSU|CSU/DSU]], Router/Switch interfaces, Firewall functionality, [[IDS.IPS|IDS/IPS]], [[Bandwidth shaping]], and even a [[VPN]] endpoint. (THINK PFSENSE.)
+
+Load Balancers are devices that balance and share the load of a network. This is done to maintain the uptime of services on their network. If for example you had 8 Web Servers you wouldn't want 3 of those servers doing all of the work while 5 do none. Instead you connect all of these servers to a Load Balancer so that each of the 8 Servers service an equal amount of tasks. If one of these Servers failed the load balancer would distribute the load equally to the remaining 7 servers.
+
+[[Proxy]] Servers receives requests from a client then the the proxy server makes a request to a service on behalf of that client, receives the response from the service and after analysis of that response sends it to the client. It is a proxy, in-between, an intermediary. 
+
+[[DNS]] lookup commands like nslookup on windows and dig on linux/MACOS allow you to query them and give you information on data stored in dns servers. The information given can be query time, DNS server queried, IP addresses of domain entered. This information is stored in the RR (Resource Records)
+
+###### "A" or AAAA records
+in a DNS database DEFINE the IP address for a particular hostname.
+A record is for [[IPv4]] addresses and AAAA records are for [[IPv6]] addresses.
+	Example A record: 
+	[www.jensenserver.com](notreal.com).  IN A  162.149.134.126       ;   Jensen Server
+	Exmaple AAAA record:
+	www.jensenserver.com IN AAAA 2001:10AC:4942:FE01:: ; Jensen Server
+
+###### CNAME records 
+or Canonical records are the aliases of one physical server hosting multiple services.
+	`; Alias names ==(Canonical)==     EXAMPLES
+	`==chat==    IN CNAME   mail.google.com.
+	`==ftp==      IN CNAME   mail.google.com.
+	`==www==  IN CNAME   mail.google.com.
+
+###### MX records 
+or Mail Exchanger records make sure you can send and receive email messages from your domain.
+	`; This is the Mail-Exchanger. You can list more than one in the integer field which indicates ;priority(lower being higher priority)
+	`IN MX mail.google.com
+	`; This provides optional info on the machine type and OS of the server
+	`IN HINFO LINUX
+	
+	; A list of machine names and addresses
+	jack.google.com.     IN A           ; windows 10
+	mail.google.com.      IN A           ; LINUX
+	sam.google.com.       IN A          ; Windows 11
+
+###### Text Records 
+or TXT Records are used to store useful public information. From verification purposes to spam minimization.
+
+`"dig google.com. txt" or "nslookup -type=txt google.com"`
+
+are used to view text records of a given domain, in this case, google.com
+
+
+[[DKIM]] Records hold the public key to mail servers which are used to verify authenticity of signed emails from those servers.
+
+[[SPF]] protocol is a text record and is used to authorize servers to send emails on a domain. It consists of and @ (all) host name and the outgoing email server name.
+
+[[DMARC]]. If for instance an email is received and does not have an associated SPF record and its not digitally signed with a DKIM Record then the DMARC is used to decide what to do with that email. It can be dropped if something comes from my domain and does not have an SPF and or DKIM sign or it can sent through into the SPAM of the user so that they can decide what to do with it. As well as setting up a email compliance report for all data on emails sent. (to see how many were identified as spam.)
+
+
+
+
+
+
+
+
+###### Internet Connection Types
+
+Satellite networking is high cost relative to normal/terrestrial networking.
+100 Mbit/s down, 5 Mbit/s up are common
+Good for remote locations with no option for normal internet connectivity connection types.
+Some systems have 250 ms up, 250ms down
+Starlink can get as low as 25 ms though it typically will be 25-60ms on average.
+Rain fade is an issue when there is a storm or heavy rain.
+
+Fiber Optics is one of the fastest and most efficient ways to communicate.
+Compared to copper its more expensive to install and repair. Though it allows for much faster and longer travel compared to copper. Because it can transmit larger data much faster it is typically used in Large network systems where LOTS of data needs to be transmitted quickly like in the WAN core with a SONET ring or Large businesses. Nowadays Fiber is more common at homes where a fiber line is converted to a copper one outside the home.
+
+Broadband is transmission across multiple frequencies and so you can get all different traffic types over the same wire.
+This is called [[DOCSIS]], you can get Data, voice, and video all from that one wire.
+
+[[(A)DSL]] uses telephone lines instead of cable television lines. Asymmetrical because typically download speed are much better than upload speeds. maximum distance limit of ~10000 feet from provider.
+
+Mobile Internet Networks for transmitting data use the same towers as regular mobile networking used for voice.
+Tethering is a method of unicasting to provide internet to a device using your mobile device over the cellular network.
+Mobile hotspot is a method of multicasting to provide internet to multiple devices in the same way.
+
+[[WISP]] is used if copper cabling/satellite is not available. WISP just uses an antenna to connect to to the network and that's it. WISP could use meshed 802.11 or 5g home internet or some other propriety network.
+Speeds vary widely from 10 to 1000 Mbit/s.
+
+###### Network Types
+[[LAN]]s usually are local and typically communicate over ethernet or wireless connection.
+
+[[WAN]] these networks are large and are what connect LANs over a large distance. There are many WAN technologies from Point-to-point serial, [[MPLS]] (Multiprotocol Label Switching), etc.
+[[WAN]]s can be terrestrial or otherwise.
+
+[[PAN]]s like bluetooth, IR, NFC, Car connection to phone, watch workout telemetry are all typically forms of Personal Area Networks.
+
+[[MAN]]s are more uncommon and sit in-between LAN and WAN these are not really a thing idk
+
+[[SAN]]s differ from NASs because they act and feel like local storage devices, they offer Block-level access and are very effecient read and write speeds. NASs on the other hand are just for file-access and sharing on a [[LAN]]. 
+
+[[WLAN]] - Based on 802.11 links two or more devices wirelessly to created a local area network
